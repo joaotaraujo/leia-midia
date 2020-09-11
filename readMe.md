@@ -12,7 +12,7 @@ In this installation, called Leiamídia, the participant is invited to be the an
 The anchor's voice is then processed by a neural network that will classify it in relation to the feeling it conveys. 
 How much joy or sadness or fear can you transmit by reading a text? Read media and try to be impartial.
 
-#You can see an example of the app in [in comming](https://www.youtube.com/channel/UCvXRe3UjqHNDnKvTpAOLyeA/featured).
+#You can see an example of the app in our youtube profile [in comming](https://www.youtube.com/channel/UCvXRe3UjqHNDnKvTpAOLyeA/featured).
 
 
 
@@ -25,7 +25,7 @@ Files
 
 
 
-* <b>Notices_crawler</b>: this crawler (based on scrapy/python) is responsible for collecting the latest news contained in the [g1 - politics notices](https://g1.globo.com/politica/). It updates according to a delay that you can edit. note that the notices information are stored in a text file ( './data_saved/notices_info.json' ).
+* <b>Notices_crawler</b>: this crawler (based on scrapy/python) is responsible for collecting the latest news contained in the [g1 - politics news](https://g1.globo.com/politica/). It updates according to a delay that you can edit. note that the notices information are stored in a text file ( './data_saved/notices_info.json' ).
 
 
 
@@ -45,16 +45,16 @@ Requirements
 To run the application, you must have <b>python 3</b> installed in your machine (for CNN, notice_crawler and OSC_server). 
 
 
-After, install the following packages using <b>pip install</b> or another package manager (i may have forgotten a module :D , but the ones that are missing can be viewed when OSC_server is compiled):
+After, install the following packages using <b>pip install</b> or another package manager (i may have forgotten a module :D , but the ones that are missing can be viewed when python applications are compiled):
 
-* numpy
-* matplotlib
-* librosa 
-* pandas
-* sklearn
-* keras
-* scrapy
-* news-please
+* numpy;
+* matplotlib;
+* librosa;
+* pandas;
+* sklearn;
+* keras;
+* scrapy;
+* news-please.
 
 
 
@@ -82,6 +82,45 @@ If you need to read and see the CNN's functioning...
 
 
 You'll need install the [jupyter-notebook framework](https://jupyter.org/install) to read the CNN code (note that you don't need compile CNN to run the app, since it has already been trained and the OSC_server just reloads the model to make predictions).
+
+
+Screenshots
+-----------
+
+<b>Data first analysis</b>
+
+In the mean x standard_deviation graph, we put circle for training/test data and valid data with a plus icon.
+
+![Data analysis](/images/CNN1.png)
+
+
+
+<b>CNN training</b>
+
+![CNN training](/images/CNN2.png)
+
+
+
+
+<b>Main screen</b>
+
+![CNN training](/images/processing1.png)
+
+
+
+<b>Screen of a notice</b>
+
+![CNN training](/images/processing2.png)
+
+
+
+<b>Webcam effects</b>
+
+![CNN training](/images/cam_effects.png)
+
+
+
+
 
 
 
@@ -112,24 +151,21 @@ Then just open the processing app at './processing_app/processing_app.pde' and c
 
 
 
-additional information
+Additional information
 -----------------------
 
+* This work focused on using only 3 of the 7 emotions provided by the [TESS Toronto emotional speech set data](https://www.kaggle.com/ejlok1/toronto-emotional-speech-set-tess);
 
-audio n está completo, mas pode ser obtido em
-note que utilizei apenas 3 tipos de emoçoes
-ruidos podem dar muito ruim
+* Noises and the microphone used maybe difficult the prediction, check the sounds recorded.
 
 
-melhorias que podem ser realizadas:
-max_pad_len tirar todos os 0's
-aumentar o dataset (tanto em tamanho quanto em classes)
-unificar o crawler
-testar outros descritores de áudio
-tratar conflito do crawler com o app, as vezes ele atualiza no momento em que o app vai ler as notices info
 
-funcionamento
---------------
+Future works
+-----------------------
+
+* Improve the padding of sounds recorded vector, ignoring when someone isn't saying;
+* Use full dataset to get all emotions and put more webcam/image effects to it;
+* Use more audio descriptors to improve the accuracy of predictions.
 
 
 
@@ -138,23 +174,5 @@ Contact
 
 <b>Email: teixeira.araujo@gmail.com</b>
 
+
 <b>Our research group (ALICE Arts Lab):</b> [https://alice.dcomp.ufsj.edu.br/](https://alice.dcomp.ufsj.edu.br/)
-
-
-
-
-
-
-
-
-
-
-
-
-
-AFAZER
-
-atualizar em tempo real
-colocar author nome no app processing
-botão voltar
-tirar import desnecessario do processing
