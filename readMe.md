@@ -39,6 +39,14 @@ Files
 
 
 
+Leiamidia fluxogram
+
+![Data analysis](/screenshots/func_diagram.png)
+
+
+
+
+
 
 Requirements
 -----------------
