@@ -18,6 +18,12 @@ How much joy or sadness or fear can you transmit by reading a text? Read media a
 Files
 -----
 <b>CNN_emotions</b>: 
+
+
+
+based on [TESS Toronto emotional speech set data](https://www.kaggle.com/ejlok1/toronto-emotional-speech-set-tess)
+
+
 <b>notices-crawler</b>
 
 <b>osc_server</b>
@@ -41,6 +47,8 @@ After, install the following packages using <b>pip install</b> or another packag
 * news-please
 
 
+
+
 You need to download [Processing](https://processing.org/download/) API to run main application.
 Open <b>./processing_app/processing_app.pde</b> and check if all imports are ok.
 If not, try to slice all <b>./processing_app/code/*.jar</b> to processing code screen (it will force the linking of the jar's into project).
@@ -48,7 +56,10 @@ If not, try to slice all <b>./processing_app/code/*.jar</b> to processing code s
 
 
 
+
+
 <b>NOT NECESSARY</b>
+
 if you need to read and see the CNN's functioning...
 
 You'll need install the <b>[jupyter-notebook framework]</b>(https://jupyter.org/install) to read the CNN code (note that you don't need compile CNN to run the app, since it has already been trained and the OSC_server just reloads the model to make predictions).
