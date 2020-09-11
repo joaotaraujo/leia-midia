@@ -22,13 +22,13 @@ Files
 <b>CNN_emotions</b>: neural network implemented in python (through jupyter-notebook, a tool that allows us to visualize the code compilation step by step). This network is composed of 3 convolutional layers, followed by a dense layer. It was trained with 600 recordings of people speaking under 3 emotions: fear, sadness and happiness (see the [TESS Toronto emotional speech set data](https://www.kaggle.com/ejlok1/toronto-emotional-speech-set-tess)). After training, given any audio, this network makes predictions under which emotion the audio most fits.
 
 
-<b>Notices\\_crawler</b>: this crawler (based on scrapy/python) is responsible for collecting the latest news contained in the [g1 website](https://g1.globo.com/politica/). It updates according to a delay that you can edit. note that the notices information are stored in a text file ( './data_saved/notices_info.json' ).
+<b>Notices_crawler</b>: this crawler (based on scrapy/python) is responsible for collecting the latest news contained in the [g1 - politics notices](https://g1.globo.com/politica/). It updates according to a delay that you can edit. note that the notices information are stored in a text file ( './data_saved/notices_info.json' ).
 
 
 <b>Osc_server</b>: the osc server is responsible for waiting for processing_app to send the file name of the recorded audio. After that, it makes predictions from the CNN model that is already loaded, and sends the predictions (using the pattern: "name_emotion - %_predicao_medo - %_predicao_alegre - %_predicao_triste") for processing app.
 
 
-<b>Processing_app:</b> this is the main app. Here we load the notices collected from crawler, print it in a interface. After choose one notice, the app starts the webcam and start to record audio time per time, sending the name of the recorded audio by osc to osc_server. After receives the prediction information, print it in the screen.
+<b>Processing_app: </b> this is the main app. Here we load the notices collected from crawler, print it in a interface. After choose one notice, the app starts the webcam and start to record audio time per time, sending the name of the recorded audio by osc to osc_server. After receives the prediction information, print it in the screen.
 
 
 
