@@ -91,32 +91,32 @@ Screenshots
 
 In the mean x standard_deviation graph, we put circle for training/test data and valid data with a plus icon.
 
-![Data analysis](/images/CNN1.png)
+![Data analysis](/screenshots/CNN1.png)
 
 
 
 <b>CNN training</b>
 
-![CNN training](/images/CNN2.png)
+![CNN training](/screenshots/CNN2.png)
 
 
 
 
 <b>Main screen</b>
 
-![CNN training](/images/processing1.png)
+![CNN training](/screenshots/processing1.png)
 
 
 
 <b>Screen of a notice</b>
 
-![CNN training](/images/processing2.png)
+![CNN training](/screenshots/processing2.png)
 
 
 
 <b>Webcam effects</b>
 
-![CNN training](/images/cam_effects.png)
+![CNN training](/screenshots/cam_effects.png)
 
 
 
