@@ -19,16 +19,23 @@ How much joy or sadness or fear can you transmit by reading a text? Read media a
 
 Files
 -----
-<b>CNN_emotions</b>: neural network implemented in python (through jupyter-notebook, a tool that allows us to visualize the code compilation step by step). This network is composed of 3 convolutional layers, followed by a dense layer. It was trained with 600 recordings of people speaking under 3 emotions: fear, sadness and happiness (see the [TESS Toronto emotional speech set data](https://www.kaggle.com/ejlok1/toronto-emotional-speech-set-tess)). After training, given any audio, this network makes predictions under which emotion the audio most fits.
 
 
-<b>Notices_crawler</b>: this crawler (based on scrapy/python) is responsible for collecting the latest news contained in the [g1 - politics notices](https://g1.globo.com/politica/). It updates according to a delay that you can edit. note that the notices information are stored in a text file ( './data_saved/notices_info.json' ).
+* <b>CNN_emotions</b>: neural network implemented in python (through jupyter-notebook, a tool that allows us to visualize the code compilation step by step). This network is composed of 3 convolutional layers, followed by a dense layer. It was trained with 600 recordings of people speaking under 3 emotions: fear, sadness and happiness (see the [TESS Toronto emotional speech set data](https://www.kaggle.com/ejlok1/toronto-emotional-speech-set-tess)). After training, given any audio, this network makes predictions under which emotion the audio most fits.
 
 
-<b>Osc_server</b>: the osc server is responsible for waiting for processing_app to send the file name of the recorded audio. After that, it makes predictions from the CNN model that is already loaded, and sends the predictions (using the pattern: "name_emotion - %_predicao_medo - %_predicao_alegre - %_predicao_triste") for processing app.
+
+* <b>Notices_crawler</b>: this crawler (based on scrapy/python) is responsible for collecting the latest news contained in the [g1 - politics notices](https://g1.globo.com/politica/). It updates according to a delay that you can edit. note that the notices information are stored in a text file ( './data_saved/notices_info.json' ).
 
 
-<b>Processing_app: </b> this is the main app. Here we load the notices collected from crawler, print it in a interface. After choose one notice, the app starts the webcam and start to record audio time per time, sending the name of the recorded audio by osc to osc_server. After receives the prediction information, print it in the screen.
+
+* <b>Osc_server</b>: the osc server is responsible for waiting for processing_app to send the file name of the recorded audio. After that, it makes predictions from the CNN model that is already loaded, and sends the predictions (using the pattern: "name_emotion - %_predicao_medo - %_predicao_alegre - %_predicao_triste") for processing app.
+
+
+
+* <b>Processing_app: </b> this is the main app. Here we load the notices collected from crawler, print it in a interface. After choose one notice, the app starts the webcam and start to record audio time per time, sending the name of the recorded audio by osc to osc_server. After receives the prediction information, print it in the screen.
+
+
 
 
 
@@ -58,8 +65,11 @@ If not, try to slice all <b>./processing_app/code/*.jar</b> to processing code s
 
 
 <b>IMPORTANT</b>
+
 Check variables of all modules (osc_server, notices_crawler and processing_app).
 In especial, to run, you only need to change crawler_path in processing code.
+
+
 
 
 
@@ -72,6 +82,8 @@ If you need to read and see the CNN's functioning...
 
 
 You'll need install the [jupyter-notebook framework](https://jupyter.org/install) to read the CNN code (note that you don't need compile CNN to run the app, since it has already been trained and the OSC_server just reloads the model to make predictions).
+
+
 
 
 
