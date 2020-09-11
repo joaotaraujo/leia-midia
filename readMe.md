@@ -39,7 +39,7 @@ Files
 
 
 
-Leiamidia fluxogram
+<b>Leiamidia fluxogram</b>
 
 ![Data analysis](/screenshots/func_diagram.png)
 
