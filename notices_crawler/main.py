@@ -3,6 +3,8 @@
 #                                                                               #
 #  1 - create a spider                                                          #
 #  2 - search all notices based on variable start_urls                          #
+#  3 - save notices information into notices_info.json file                     #
+#  4 - update notices based on delay_time                                       #
 #                                                                               #
 #  OBS: to run type: scrapy runspider main.py                                   #
 #                                                                               #
@@ -22,15 +24,20 @@ import pandas as pd
 # to set delay_time of update
 import time
 
+from keras.models import model_from_json
+import pandas as pd	
+import numpy as np
+
+# to extract notices information 
+from newsplease import NewsPlease
 
 #################################### setting variables ##########################################
 
 # set delay time
-delay_time = 50
+delay_time = 10000
 
 # set starts_url
 url = 'https://g1.globo.com/politica'
-
 
 
 #################################### main function ##########################################
@@ -63,18 +70,23 @@ class NoticesSpider_urls(scrapy.Spider):
 													 # here we dont get them
               if ( str(item.css(NAME_SELECTOR).extract_first()) != 'None'):
 																		
-																		# add notice information to notices
-																		notices.append ( [ item.css(NAME_SELECTOR).extract_first(), item.css(LINK_SELECTOR).extract_first() ] )
+                  print("\nGot URL: ", item.css(LINK_SELECTOR).extract_first());
 
 
-          print(notices)
+                  notice = NewsPlease.from_url(item.css(LINK_SELECTOR).extract_first())
 
-          # save notices informations in directory
-          notices_df = pd.DataFrame(notices, columns=['name','url'])
-          notices_df.to_pickle('./data_saved/notices_url')
+														    # put all notice information in list
+                  notices.append([notice.title, notice.description, notice.authors, notice.date_publish, notice.image_url, notice.maintext])
 
-          df = pd.read_pickle('./data_saved/notices_url')
-          print(df)
+                  print("\nGot notice: ", notice.title)
+
+      
+          # save notices information into a json file
+          notices_df = pd.DataFrame(notices, columns=['title', 'description', 'authors', 'date_publish', 'image_url', 'maintext'])
+          notices_df.to_json (r'./data_saved/notices_info.json')
+
+
+          #update_notice_information();
 
           print('\n\nData updated sucessfull! (',time.strftime("%c"),')')
 

@@ -39,20 +39,14 @@ num_channels = 1
 # OSC parameters
 ip = "127.0.0.1"
 osc_client_port = 9001
-osc_server_port = 9046
-
-
-# the crawler will update notices each 60 minutes
-update_delay = 60
-
-# full path where sounds are recorder
-soundPath = "/home/joao/Desktop/leiaMidia/processing_app/sounds/"
+osc_server_port = 9063
 
 
 
 ################################ starting the server #######################################
 
-fc.OSC_server(soundPath, n_mfcc, max_pad_len, num_channels, ip, osc_server_port, osc_client_port, update_delay)
+
+fc.OSC_server(n_mfcc, max_pad_len, num_channels, ip, osc_server_port, osc_client_port)
 
 
 

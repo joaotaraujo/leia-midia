@@ -6,7 +6,6 @@
 #			-	send_msg_osc(self, tag, value): send predicted information via OSC                                                                #
 #			-	process_osc_msg(self, unused_addr, args, fileName): get audio file name via OSC, process it, and send the predicted information   #
 #			-	startListening(self): put server to wait for OSC messages                                                                         #
-#			-	update_notice_information(): update all notices according to self.update_delay variable                                           #
 #                                                                                                                                       #
 #########################################################################################################################################
 
@@ -45,16 +44,15 @@ from pythonosc import udp_client
 class OSC_server:
 
 				# constructor to set self variables and start listening
-				def __init__(self, soundPath, n_mfcc, max_pad_len, num_channels, ip, server_port, client_port, update_delay):
+				def __init__(self, n_mfcc, max_pad_len, num_channels, ip, server_port, client_port):
 
-								self.soundPath = soundPath
+								self.soundPath = "../processing_app/sounds/"
 								self.n_mfcc = n_mfcc
 								self.max_pad_len = max_pad_len
 								self.num_channels = num_channels
 								self.ip = ip
 								self.server_port = server_port
 								self.client_port = client_port
-								self.update_delay = update_delay
 
 								# load json and create model
 								json_file = open('../CNN_emotions/model_saved/model.json', 'r')
@@ -77,26 +75,27 @@ class OSC_server:
 				#---------------------------------------------------------------------------------------------------------------------------------------#
 				# this function load the audio and pick their features
 				def extract_features(self, file_name):
-							
-								try:
-												# get the audio vector and the sample rate
-								    y, sr = librosa.load(file_name, res_type='kaiser_fast') 
-								    
-												# get mfcc's vector
-								    mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=self.n_mfcc)
 
-												# adjust the size of each audio, according to max_pad_len
-								    if(mfccs.shape[1]>self.max_pad_len):
-								        mfccs = mfccs[:,:self.max_pad_len]
-								    else:
-								        pad_width = self.max_pad_len - mfccs.shape[1]
-								        mfccs = np.pad(mfccs, pad_width=((0, 0), (0, pad_width)), mode='constant')
-								    
-								except Exception as e:
-								    print("Error encountered while parsing file: ", file_name)
-								    return None 
-								 
-								return mfccs
+						try:
+								print("\n\n\n\n",file_name)
+								# get the audio vector and the sample rate
+								y, sr = librosa.load(file_name, res_type='kaiser_fast') 
+
+								# get mfcc's vector
+								mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=self.n_mfcc)
+
+								# adjust the size of each audio, according to max_pad_len
+								if(mfccs.shape[1]>self.max_pad_len):
+										mfccs = mfccs[:,:self.max_pad_len]
+								else:
+										pad_width = self.max_pad_len - mfccs.shape[1]
+										mfccs = np.pad(mfccs, pad_width=((0, 0), (0, pad_width)), mode='constant')
+
+						except Exception as e:
+								print("Error encountered while parsing file: ", file_name)
+								return None 
+
+						return mfccs
 
 
 
@@ -161,21 +160,18 @@ class OSC_server:
 				def process_osc_msg(self, unused_addr, args, fileName):
 
 								print("Message received: ", fileName)
-
+        
 								predicted_class, predicted_proba = self.get_prediction(fileName)
 								oscMsg = "{}-{:.2f}-{:.2f}-{:.2f}".format(predicted_class, predicted_proba[0]*100, predicted_proba[1]*100,   predicted_proba[2]*100)
 								print("Sending OSC msg: ", oscMsg)
-								print("Done!")
+								# update notices hour per hour
+								now = datetime.datetime.now()
+								print("Done ( ", now.hour, "h : ", now.minute, "m : ", now.second, "s )!")
 
 								self.send_msg_osc("/prediction", oscMsg)
 
 
-								# update notices hour per hour
-								now = datetime.datetime.now()
 
-								if (now.minute % self.update_delay == 0):
-												update_notice_information()
-												print("Notices updated sucessfull ( ", now.hour, "h : ", now.minute, "m : ", now.second, "s )!")
 
 
 				#---------------------------------------------------------------------------------------------------------------------------------------#
@@ -197,31 +193,4 @@ class OSC_server:
 
 
 
-				############################################################# update function ####################################################################
-				#---------------------------------------------------------------------------------------------------------------------------------------#
-				# function to read new urls from crawler and get notices information
-				def update_notice_information():
-
-								urls_df = pd.read_pickle('../notices_crawler/data_saved/notices_url')
-								urls = np.array(urls_df.url.tolist())
-
-								print("\nGetting notices information...")
-
-								notices_info = []
-
-								for i in range(len(urls)):
-
-										notice = NewsPlease.from_url(urls[i])
-
-										# put all notice information in list
-										notices_info.append([notice.title, notice.description, notice.authors, notice.date_publish, notice.image_url, notice.maintext])
-										print("\nGot notice: ", notice.title)
-
-								# save notices information into a json file
-								notices_info_df = pd.DataFrame(notices_info, columns=['title', 'description', 'authors', 'date_publish', 'image_url', 'maintext'])
-								notices_info_df.to_json (r'../notices_crawler/data_saved/notices_info.json')
-
-								return notices_info
-
-
-
+		

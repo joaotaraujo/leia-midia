@@ -66,18 +66,10 @@ import netP5.*;
 // set the ip and OSC client/server ports
 String ip = "127.0.0.1";
 int server_port = 9001;
-int client_port = 9046;
+int client_port = 9063;
 
-// full path for notices images and sound recorders
-String sound_path = "/home/joao/Desktop/leiaMidia/processing_app/sounds/";
-String crawler_path = "/home/joao/Desktop/leiaMidia/notices_crawler/";
-
-// set the speed of the legend in webcam and the audio record
-int legend_speed = 10;
-int record_speed = 80;
-
-// set the delay time for audio starts the records
-int audio_record_start_delay = 70;
+// full path for notices images
+String crawler_path = "/home/joao/Desktop/git/leia_midia/notices_crawler/";
 
 // delay of notices update
 int update_notices_delay = 10000;
@@ -134,6 +126,17 @@ String lastFearPercent = "";
 String lastHappyPercent = "";
 String lastSadPercent = "";
 
+// full path for sound recorders
+String sound_path = "./sounds/";
+
+// set the speed of the legend in webcam and the audio record
+int legend_speed = 10;
+int record_speed = 70;
+
+// set the delay time for audio starts the records
+int audio_record_start_delay = 70;
+
+
 // to get what is the currently page
 // true = first page;
 // false = second page;
@@ -144,6 +147,8 @@ Boolean reset_webcam_effects = false;
 // this variable get the notices, format it, and print below the webcam
 String legend_titles = "                                                            ";
 
+// to set the name of the new recorded audio, ex: 251.wav if haves 250 in directory
+int sound_rec_count;
 
 /********************************************************************************************************************************************************************************/
 /******************************************************************************* CONTROL VARIABLES ******************************************************************************/
@@ -155,9 +160,9 @@ Boolean flagOscReceived = false;
 
 
 // for time count; in processing if we use delay() function, it will freeze the software
-int time_record = 0;
-int time_legend = 0;
-int time_notice_update = 0;
+int time_record;
+int time_legend;
+int time_notice_update;
 
 
 /********************************************************************************************************************************************************************************/
@@ -199,7 +204,7 @@ void setup() {
   text("Escolha uma notícia, faremos uma análise sua!", 450 , 90); 
   
   // set the image and text in the middle content
-  img = loadImage(crawler_path + "/images/g1.png");
+  img = loadImage(crawler_path + "images/g1.png");
   img.resize(0, 120);
   image(img, 720, 180);
   text("      O portal de notícias da globo", 500 , 320);
@@ -242,6 +247,11 @@ void setup() {
   
   button_restart_color_up = color(255);
   button_restart_color_down = color(0);
+  
+  time_record = 0;
+  time_legend = 0;
+  time_notice_update = 0;
+  sound_rec_count = 0;
 }
 
 
@@ -278,10 +288,10 @@ void draw() {
     
     // if delay_time is done, starts recording...
     if( time_record == audio_record_start_delay ) {
-      
+      sound_rec_count = listFiles(sound_path).length + 1;
       // starts recorder
       println("starting recording audio...");
-      recorder = minim.createRecorder(in, "sounds/" + (listFiles(sound_path).length + 1) + ".wav");
+      recorder = minim.createRecorder(in, "sounds/" + sound_rec_count + ".wav");
       recorder.beginRecord();
       
     }
@@ -289,20 +299,22 @@ void draw() {
     else if ( time_record == audio_record_start_delay + record_speed ){
       
       // stops the recorder and save the .wav
-      System.out.println("audio captured (" + (listFiles(sound_path).length + 1) + ".wav)!");
+      System.out.println("audio captured (" + sound_rec_count + ".wav)!");
       recorder.save();
       recorder.endRecord();
-      
+      delay(10);
       // send the name of the audio saved via OSC
       OscMessage myMessage = new OscMessage("/fileName");
-      String msg_string = (listFiles(sound_path).length + 1) + ".wav";
+      
+      String msg_string = sound_rec_count + ".wav";
+      
       myMessage.add(msg_string); 
       oscP5.send(myMessage, myRemoteLocation); 
       
       println("OSC msg sended: ", msg_string);
       
       // reset time_record
-      time_record = audio_record_start_delay - 1;
+      time_record = audio_record_start_delay - 10;
     }
     
     
@@ -733,7 +745,6 @@ void update_notices(){
   
   // load notice images
   for (int i = 0; i < titles.size(); i++) {
-    
     // get the images of notices
     String image_name = image_urls.get(i).split("/")[image_urls.get(i).split("/").length-1];
     File notice_image = new File (crawler_path + "images/" + image_name);
