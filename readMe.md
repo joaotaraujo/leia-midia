@@ -97,7 +97,7 @@ In the mean x standard_deviation graph, we put circle for training/test data and
 
 <b>CNN training</b>
 
-![CNN training](/screenshots/CNN2.png)
+![CNN training](/screenshots/cnn2.png)
 
 
 
