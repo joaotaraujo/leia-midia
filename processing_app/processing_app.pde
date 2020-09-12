@@ -107,7 +107,8 @@ ArrayList<String> maintexts = new ArrayList<String>();
 // to make selection color effect in notices title 
 ArrayList<Integer> rectX = new ArrayList<Integer>(); 
 ArrayList<Integer>  rectY = new ArrayList<Integer>();      
-int rectSize = 1600;     // Diameter of rect
+int rect_size_x = 1300;     // Diameter of rect
+int rect_size_y = 150;
 color rectColor, baseColor;
 color rectHighlight;
 color currentColor;
@@ -116,7 +117,6 @@ ArrayList<Boolean> rectOver = new ArrayList<Boolean>();
 // to make restart button
 Integer button_restart_x; 
 Integer button_restart_y;      
-int button_size = 60;     // Diameter of rect
 color button_restart_color_up, button_restart_color_down;
 Boolean button_restart_mouse_over;
 
@@ -173,11 +173,11 @@ int time_notice_update;
 void setup() {
   
   // make the background
-  background(255);
+  background(248);
   size(1600, 960);
   
   // set the text font
-  textFont(createFont(PFont.list()[0], 30));
+  textFont(createFont(PFont.list()[4], 30));
   
   
   // start oscP5, listening for incoming messages at port 9001 
@@ -199,31 +199,39 @@ void setup() {
   
   update_notices();
     
+  for( int i = 0; i < 100; i++){
+    stroke(map(i,0,100,160,210),0,0);
+    line(0,i,1600,i);
+  }
+    
   // set the title
-  fill(0); 
-  text("Escolha uma notícia, faremos uma análise sua!", 450 , 90); 
+  fill(255); 
+  text("Instalação Tecnológica Leiamídia", 560 , 70); 
   
   // set the image and text in the middle content
   img = loadImage(crawler_path + "images/g1.png");
-  img.resize(0, 120);
-  image(img, 720, 180);
-  text("      O portal de notícias da globo", 500 , 320);
+  img.resize(0, 130);
+  image(img, 690, 180);
+  fill(195,0,0); 
+  //text("      O portal de notícias da globo", 500 , 335);
   
-  textFont(createFont(PFont.list()[0], 22));
+  textFont(createFont(PFont.list()[2], 20));
   
-  text("By: João Teixeira Araújo", 650 , 125);  
+  fill(100);
+  text("Escolha uma notícia, faremos uma análise sua!", 575 , 345);  
   
-  fill(120);
-  text("           Notícias atualizadas em tempo real!", 500 , 352);  
+  fill(60);
+  line(30,390,1560,390);
   
-  textFont(createFont(PFont.list()[0], 30));
   
-  img = loadImage("./images/leiamidia_icon.png");
-  img.resize(0, 100);
-  image(img, 1405, 20);
-  image(img, 20, 20);
+  textFont(createFont(PFont.list()[2], 30));
   
-  line(0, 140, 1600, 140);
+  img = loadImage("./images/leiamidia_icon_white.png");
+  img.resize(0, 80);
+  image(img, 1460, 10);
+  image(img, 20, 10);
+  
+  line(0, 90, 1600, 90);
  
   
   // make notices rect's and format notices titles
@@ -231,12 +239,24 @@ void setup() {
   
     // make the notice title rect
     rectOver.add(i, false);
-    rectX.add(i, 0);
-    rectY.add(430 + ( 80 * i ) );
+    rectX.add(i, 260);
+    rectY.add(440 + ( 210 * i ) );
     
     // format legend titles to show below the webcam
     legend_titles = legend_titles + titles.get(i) + "                 ";
     
+    // print notice image
+    img = loadImage(crawler_path + "images/" + image_urls.get(i).split("/")[image_urls.get(i).split("/").length-1]);
+    img.resize(0, 150);
+    image(img, 30, 440 + ( 210 * i ) );
+    
+    String format_description = "";
+    int break_line = 150;
+    for( int j = 0; j < descriptions.get(i).length() / break_line; j++){
+      format_description = format_description + descriptions.get(i).substring(j * break_line, j * break_line + break_line) + "\n";
+    }
+    format_description = format_description + descriptions.get(i).substring((descriptions.get(i).length() / break_line) * break_line, descriptions.get(i).length()) + "\n";
+    descriptions.set(i,format_description);
   }
   
   // start rect of notices colors
@@ -281,7 +301,7 @@ void draw() {
   }
   
   // if we are in the second page...
-  else {
+  else {    
     
     // count the time of record
     time_record ++;
@@ -320,8 +340,8 @@ void draw() {
     
     // make restart button
     button_restart_mouse_over = false;
-    button_restart_x = 1500;
-    button_restart_y = 870;
+    button_restart_x = 1470;
+    button_restart_y = 900;
     
     update_restart_button();
     
@@ -330,11 +350,11 @@ void draw() {
       
       reset_webcam_effects = false;
       
-      // make the prediction rect
-      make_prediction_rect();
-      
       // make the prediction circle with the triangle of predictions
       make_prediction_circle();
+      
+      // make the prediction rect
+      make_prediction_rect();
     
       // reset the flag to wait another msg
       flagOscReceived = false;
@@ -350,7 +370,7 @@ void draw() {
     apply_webcam_effects();
     
     // print webcam frame
-    image(cam,945,160);
+    image(cam,945,120);
       
     // update the legend below the webcam  
     update_legend();
@@ -509,21 +529,48 @@ void apply_webcam_effects(){
 void make_prediction_circle(){
   
     // change text font
-    textFont(createFont(PFont.list()[0], 30));
+    textFont(createFont(PFont.list()[10], 22));
+    
+    // content gray of predictions
+    fill(230);
+    noStroke();
+    rect(950, 670, 630, 275, 7);
+    stroke(0);
     
     // print circle of predictions
     fill(256, 0, 0);
-    text("Fear", 1190, 890);  
+    text("Fear", 1170, 860);  
     fill(0, 200, 0);
-    text("Happy", 1055, 695);  
+    text("  Happy", 1055, 715);  
     fill(0, 0, 256);
-    text("Sad", 955, 890);  
+    text("Sad", 990, 860);  
     
-    fill(255);
-    circle(1100, 815, 200);
-    circle(1100, 815, 150);
-    circle(1100, 815, 100);
-    circle(1100, 815, 50);
+    stroke(80);
+    fill(240);
+    circle(1100, 800, 140);
+    stroke(205);
+    fill(235);
+    circle(1100, 800, 125);
+    fill(230);
+    circle(1100, 800, 110);
+    fill(225);
+    circle(1100, 800, 95);
+    fill(220);
+    circle(1100, 800, 80);
+    fill(215);
+    circle(1100, 800, 65);
+    fill(210);
+    circle(1100, 800, 50);
+    fill(205);
+    circle(1100, 800, 35);
+    fill(200);
+    circle(1100, 800, 20);
+    fill(195);
+    circle(1100, 800, 5);
+    
+    fill(80);
+    stroke(0);
+    circle(1100, 800, 1);
   
     Float sadPercent = Float.parseFloat(lastSadPercent) * 0.01 ;
     Float fearPercent = Float.parseFloat(lastFearPercent) * 0.01 ;
@@ -547,9 +594,9 @@ void make_prediction_circle(){
     }
     
     // make the triangle of predictions
-    triangle(1100 - (80 * sadPercent), 815 + (60 * sadPercent),
-            1100 + (80 * fearPercent), 815 + (60 * fearPercent),
-            1100, 815 - (100 * happyPercent));
+    triangle(1100 - (70 * sadPercent), 800 + (45 * sadPercent),
+            1100 + (70 * fearPercent), 800 + (45 * fearPercent),
+            1100, 800 - (70 * happyPercent));
             
 }
 
@@ -558,18 +605,20 @@ void make_prediction_circle(){
 void make_prediction_rect(){
   
     // change text font
-    textFont(createFont(PFont.list()[0], 20));
+    textFont(createFont(PFont.list()[2], 20));
     
     // print rect of predictions
-    fill(255);
-    rect(1300, 700, 240, 130);
+    fill(220);
+    noStroke();
+    rect(1310, 710, 240, 150, 7);
+    stroke(0);
     
     fill(50);
-    text("      Your emotion is: " + lastEmotion + "!", 1260, 730); 
-    text("          -----------------------------", 1220, 745); 
-    text("           Fear:     " + lastFearPercent + "%", 1235, 770); 
-    text("           Happy:   " + lastHappyPercent + "%", 1235, 790); 
-    text("           Sad:      " + lastSadPercent + "%", 1235, 810); 
+    text(" Your emotion is: " + lastEmotion + "!", 1320, 740); 
+    line(1320, 751, 1540, 751);
+    text("        Fear:      " + lastFearPercent + "%", 1285, 790); 
+    text("        Happy:   " + lastHappyPercent + "%", 1285, 815); 
+    text("        Sad:       " + lastSadPercent + "%", 1285, 840); 
     
 }
 
@@ -578,11 +627,13 @@ void make_prediction_rect(){
 void update_legend(){
   
     // make the legend red rect
-    fill(170,0,0);
+    noStroke();
+    fill(195,0,0);
     rect(945, 600, 639, 50);
+    stroke(0);
     
     // change text font
-    textFont(createFont(PFont.list()[0], 25));
+    textFont(createFont(PFont.list()[2], 25));
     
     // make the white legend of notices
     fill(255);
@@ -596,13 +647,16 @@ void update_legend(){
     } 
     
     // rect to filter the legend text
-    fill(200);
-    stroke(200);
-    rect(1585, 610, 30, 30);
+    fill(240);
+    noStroke();
+    rect(1580, 610, 30, 30);
+    fill(195,0,0);
+    rect(1580, 610, 10, 30);
+    stroke(0);
     
     // change text
     stroke(0);
-    textFont(createFont(PFont.list()[0], 20));
+    textFont(createFont(PFont.list()[2], 20));
       
     // put the red legend g1 logo
     noTint();
@@ -617,19 +671,12 @@ void update_legend(){
 void update_restart_button() {
   
   //if mouse is over the button...
-  if ( overRect(button_restart_x, button_restart_y, button_size, button_size) ) {
+  if ( overRect(button_restart_x, button_restart_y, 30, 70) ) {
     button_restart_mouse_over = true;
   } else {
     button_restart_mouse_over = false;
   }
   
-  
-  // print restart text
-  fill(200);
-  stroke(200);
-  rect(button_restart_x, button_restart_y - 25, 100, 200 );
-    
-    
   // highlight the button if mouse is on
   if (button_restart_mouse_over) {
     fill(button_restart_color_up);
@@ -638,24 +685,24 @@ void update_restart_button() {
   }
 
   // change text font
-  textFont(createFont(PFont.list()[0], 20));
+  textFont(createFont(PFont.list()[4], 20));
   
   // print the button
   stroke(0);
-  fill(150,17,17);
-  rect(button_restart_x, button_restart_y, button_size, button_size);
+  fill(180,17,17);
+  rect(button_restart_x - 15, button_restart_y, 95, 30, 7);
   
-  fill(0);
-  text(" Back", button_restart_x - 3, button_restart_y - 5 );  
+  fill(255);
+  text(" Back", button_restart_x + 15, button_restart_y + 22 );  
   
   stroke(0);
 
   img = loadImage("./images/back_icon.png");
-  img.resize(0, 45);
-  image(img, 1505, 880);
+  img.resize(0, 20);
+  image(img, 1460, 907);
     
   // change text font
-  textFont(createFont(PFont.list()[0], 30));
+  textFont(createFont(PFont.list()[2], 30));
 }
 
 
@@ -665,7 +712,7 @@ void update_notice_rects() {
   for(int i = 0; i < titles.size(); i++){
     
     //i f mouse is over the rect...
-    if ( overRect(rectX.get(i), rectY.get(i), rectSize, rectSize) ) {
+    if ( overRect(rectX.get(i), rectY.get(i), rect_size_x, rect_size_y) ) {
       
       // set true to it
       rectOver.set(i, true);
@@ -692,17 +739,30 @@ void update_notice_rects() {
       fill(rectColor);
     }
     
+    // change the fontrectX
+    textFont(createFont(PFont.list()[4], 23));
+    
     // print the rects
-    stroke(0);
-    rect(rectX.get(i), rectY.get(i), rectSize, rectSize);
+    stroke(255);
+    rect(rectX.get(i), rectY.get(i), rect_size_x, rect_size_y,7);
     
     // print the red circle of each notice
-    fill(200,0,0); 
-    circle(20, 470 + ( 80 * i ), 20);  
+    //fill(200,0,0); 
+    //stroke(200,0,0);
+    //circle(277, 500 + ( 200 * i ), 5);  
     
     // print the notice titles
-    fill(0);
-    text(titles.get(i), 50, 480 + ( 80 * i ) );
+    fill(195,0,0);
+    text(titles.get(i), 290, 480 + ( 210 * i));
+    
+    stroke(200,0,0);
+    line(290, 490 +  ( 210 * i ),  290 + 1240, 490 + ( 210 * i ));
+    
+    // change the fontrectX
+    textFont(createFont(PFont.list()[2], 18));
+    // print the notice descriptions
+    fill(80);
+    text(descriptions.get(i), 290, 530 + ( 210 * i ) );
     
   }
     
@@ -779,43 +839,46 @@ void mousePressed() {
         // update the current page
         current_page = false;
         
-        // reprint a blank page in title
+        // reprint a blank page in content
         fill(255);
-        rect(0, 141, 1600, 950);
+        rect(0, 100, 1600, 950);
         
-        // reprint a blank page in content    
-        fill(255);
-        stroke(255);
-        rect(220, 0, 1600, 138);
-        stroke(0);
         
-        // print the notice title
-        fill(0);
-        text(titles.get(i), 230, 80 );
+        // set the text font
+        textFont(createFont(PFont.list()[4], 25));  
+        fill(195,0,0);
+        text(titles.get(i), 170, 450 , 650, 650);
+        
             
         // change the font
-        textFont(createFont(PFont.list()[0], 22));
+        textFont(createFont(PFont.list()[2], 19));
+        fill(90);
         
         // print notice description
-        text(maintexts.get(i), 20, 420, 880, 500 );
+        text(maintexts.get(i), 20, 560, 890, 500 );
+        
+        strokeWeight(3);
+        stroke(195,0,0);
+        rect(258, 148, 408, 273, 7);
+        strokeWeight(1);
         
         // print notice image
         String img_directory = crawler_path + "images/" + image_urls.get(i).split("/")[image_urls.get(i).split("/").length-1];
         img = loadImage(img_directory);
-        img.resize(0, 240);
-        image(img, 215, 160 );
+        img.resize(0, 270);
+        image(img, 260, 150 );
         
         // print the gray content for webcam analyzes
-        fill(200);
-        rect(926, 141, 926, 960);
+        fill(240);
+        rect(926, 100, 926, 960);
         
-        // print the division content line
-        fill(0);
-        stroke(0);
-        line(925, 141, 925, 960);
+        strokeWeight(10);
+        stroke(195,0,0);
+        rect(945, 120, 639, 530, 7);
+        strokeWeight(1);
         
         // reformat the font
-        textFont(createFont(PFont.list()[0], 30));
+        textFont(createFont(PFont.list()[2], 30));
         
         // start webcam
         cam.start(); 
@@ -831,7 +894,7 @@ void mousePressed() {
       // update the current page
       current_page = true;
       
-      if ( recorder.isRecording() ){
+      if ( recorder!= null && recorder.isRecording() ){
         
         // stops the recorder and save the .wav
         System.out.println("audio capture interrupt! saving part of sound" + (listFiles(sound_path).length + 1) + ".wav)!");
