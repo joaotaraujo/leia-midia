@@ -12,7 +12,7 @@ In this installation, called Leiamídia, the participant is invited to be the an
 The anchor's voice is then processed by a neural network that will classify it in relation to the feeling it conveys. 
 How much joy or sadness or fear can you transmit by reading a text? Read media and try to be impartial.
 
-You can see an example of the app in our youtube profile [in comming](https://www.youtube.com/watch?v=YxoEqYJBJpA).
+You can see an example of the app in our youtube profile [here](https://www.youtube.com/watch?v=YxoEqYJBJpA).
 
 
 
